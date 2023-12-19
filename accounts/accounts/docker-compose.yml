@@ -9,7 +9,7 @@ services:
         limits:
           memory: 700m
     networks:
-      -eazybank
+      {eazybank}
 
   loans:
     image: "amine99888/loans:s4"
@@ -21,7 +21,7 @@ services:
         limits:
           memory: 700m
     networks:
-      -eazybank
+      {eazybank}
 
   cards:
     image: "amine99888/cards:s4"
@@ -33,8 +33,8 @@ services:
         limits:
           memory: 700m
     networks:
-      -eazybank
+      {eazybank}
 networks:
-  - eazybank:
+   eazybank:
       driver: "bridge"
 
