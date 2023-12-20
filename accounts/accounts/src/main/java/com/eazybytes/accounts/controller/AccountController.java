@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +27,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/api/",produces = (MediaType.APPLICATION_JSON_VALUE))
 @Validated
-@AllArgsConstructor
 public class AccountController {
 
-    private IAccountService iAccountService;
+    private final IAccountService iAccountService;
+      public AccountController(IAccountService iAccountService){
+         this.iAccountService=iAccountService;
+     }
+    @Value("${build.version}")
+    private String buildVersion ;
+
     @Operation(summary ="Create Account Rest API",
                 description = "REST API to create new Customer & Account inside EasyBank ")
     @ApiResponse(responseCode = "201",
@@ -123,6 +129,12 @@ public class AccountController {
                     .status(HttpStatus.EXPECTATION_FAILED)
                     .body(new ResponseDto(AccountConstants.STATUS_417,AccountConstants.MESSAGE_417_DELETE));
         }
+    }
+    @GetMapping("build-info")
+    public ResponseEntity<String>getInfoBuild(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(buildVersion);
     }
 
 
