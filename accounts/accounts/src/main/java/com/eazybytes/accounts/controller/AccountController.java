@@ -1,6 +1,7 @@
 package com.eazybytes.accounts.controller;
 
 import com.eazybytes.accounts.constants.AccountConstants;
+import com.eazybytes.accounts.dto.AccountsContactInfoDto;
 import com.eazybytes.accounts.dto.CustomerDto;
 import com.eazybytes.accounts.dto.ErrorResponseDto;
 import com.eazybytes.accounts.dto.ResponseDto;
@@ -37,6 +38,8 @@ public class AccountController {
     private String buildVersion ;
       @Autowired
     private Environment environment;
+    @Autowired
+    private AccountsContactInfoDto accountsContactInfoDto;
 
     @Operation(summary ="Create Account Rest API",
                 description = "REST API to create new Customer & Account inside EasyBank ")
@@ -143,6 +146,12 @@ public class AccountController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(environment.getProperty("JAVA_HOME"));
+    }
+    @GetMapping("contact-info")
+    public ResponseEntity<AccountsContactInfoDto>getContactInfo(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(accountsContactInfoDto);
     }
 
 
