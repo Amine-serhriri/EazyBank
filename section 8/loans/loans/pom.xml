@@ -100,7 +100,7 @@
 				<version>3.4.0</version>
 				<configuration>
 					<to>
-						<image>docker.io/amine99888/${project.artifactId}:s4</image>
+						<image>docker.io/amine99888/${project.artifactId}:s8</image>
 					</to>
 				</configuration>
 			</plugin>
