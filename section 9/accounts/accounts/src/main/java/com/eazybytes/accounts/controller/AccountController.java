@@ -34,8 +34,8 @@ public class AccountController {
       public AccountController(IAccountService iAccountService){
          this.iAccountService=iAccountService;
      }
-    @Value("${build.version}")
-    private String buildVersion ;
+    /*@Value("${build.version}")
+    private String buildVersion ;*/
       @Autowired
     private Environment environment;
     @Autowired
@@ -135,12 +135,12 @@ public class AccountController {
                     .body(new ResponseDto(AccountConstants.STATUS_417,AccountConstants.MESSAGE_417_DELETE));
         }
     }
-    @GetMapping("build-info")
+    /*@GetMapping("build-info")
     public ResponseEntity<String>getInfoBuild(){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(buildVersion);
-    }
+    }*/
     @GetMapping("java-version")
     public ResponseEntity<String>getJavaVersion(){
         return ResponseEntity
