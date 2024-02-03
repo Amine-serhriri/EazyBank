@@ -6,6 +6,7 @@ import com.eazybytes.accounts.dto.CustomerDto;
 import com.eazybytes.accounts.dto.ErrorResponseDto;
 import com.eazybytes.accounts.dto.ResponseDto;
 import com.eazybytes.accounts.service.IAccountService;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -34,8 +37,9 @@ public class AccountController {
       public AccountController(IAccountService iAccountService){
          this.iAccountService=iAccountService;
      }
-    /*@Value("${build.version}")
-    private String buildVersion ;*/
+    @Value("${build.version}")
+    private String buildVersion ;
+      private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
       @Autowired
     private Environment environment;
     @Autowired
@@ -135,12 +139,21 @@ public class AccountController {
                     .body(new ResponseDto(AccountConstants.STATUS_417,AccountConstants.MESSAGE_417_DELETE));
         }
     }
-    /*@GetMapping("build-info")
+    @Retry(name = "getInfoBuild",fallbackMethod = "getInfoBuildFallback")
+    @GetMapping("build-info")
     public ResponseEntity<String>getInfoBuild(){
+        LOGGER.debug("getBuildInfo() method invoked");
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(buildVersion);
-    }*/
+    }
+    public ResponseEntity<String>getInfoBuildFallback(Throwable throwable){
+        LOGGER.debug("getInfoBuildFallback() method invoked");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("0.9");
+    }
+
     @GetMapping("java-version")
     public ResponseEntity<String>getJavaVersion(){
         return ResponseEntity
